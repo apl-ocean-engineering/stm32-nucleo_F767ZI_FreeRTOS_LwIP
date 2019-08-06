@@ -30,7 +30,7 @@ extern int __io_getchar(void) __attribute__((weak));
 
 
 
-
+/// \AMM redundant with version in sysmem.c
 //caddr_t _sbrk(int incr)
 //{
 //	extern char end asm("end");

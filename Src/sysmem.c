@@ -70,7 +70,17 @@ caddr_t _sbrk(int incr)
 		heap_end = &end;
 
 	prev_heap_end = heap_end;
+
+#ifdef FreeRTOS
+	/* Use the NVIC offset register to locate the main stack pointer. */
+	min_stack_ptr = (char*)(*(unsigned int *)*(unsigned int *)0xE000ED08);
+	/* Locate the STACK bottom address */
+	min_stack_ptr -= MAX_STACK_SIZE;
+
+	if (heap_end + incr > min_stack_ptr)
+#else
 	if (heap_end + incr > stack_ptr)
+#endif
 	{
 		errno = ENOMEM;
 		return (caddr_t) -1;
